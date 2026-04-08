@@ -1,0 +1,63 @@
+"version": '3.8'
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: todo-app-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongo:27017/tododb
+    networks:
+      - todonet
+    restart: always
+    depends_on:
+      - mongo
+    healthcheck:
+    # ping mongodb every 30 seconds to check if it's up and running
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+  
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: todo-app-frontend
+    networks:
+      - todonet
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api/todos
+    restart: always
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5173/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  mongo:
+    image: mongo:latest
+    container_name: todo-app-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - todonet
+    restart: always
+
+networks:
+  todonet:
+    driver: bridge
+
+volumes:
+  mongo-data:
