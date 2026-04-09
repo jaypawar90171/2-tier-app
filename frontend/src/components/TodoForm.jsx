@@ -19,7 +19,7 @@ function TodoForm({ onAdd }) {
         placeholder="Add a new todo..."
         className="todo-input"
       />
-      <button type="submit" className="add-button">Add</button>
+      <button type="submit" className="add-button">Add..</button>
     </form>
   );
 }
