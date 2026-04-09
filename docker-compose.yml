@@ -1,10 +1,7 @@
 "version": '3.8'
 services:
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    image: "todo-app-backend"
+    image: jayp07/todo-app-backend:latest
     container_name: todo-app-backend
     ports:
       - "5000:5000"
@@ -25,10 +22,7 @@ services:
       start_period: 30s
   
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    image: "todo-app-frontend"
+    image: jayp07/todo-app-frontend:latest
     container_name: todo-app-frontend
     networks:
       - todonet
