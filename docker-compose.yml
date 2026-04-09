@@ -4,6 +4,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: "todo-app-backend"
     container_name: todo-app-backend
     ports:
       - "5000:5000"
@@ -27,6 +28,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    image: "todo-app-frontend"
     container_name: todo-app-frontend
     networks:
       - todonet
